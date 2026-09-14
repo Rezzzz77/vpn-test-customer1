@@ -17,10 +17,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          set +e
           {
             echo "time=$(date -u +%FT%TZ)"
             uname -a
-            sudo modprobe tun 2>/dev/null || true
+            sudo modprobe tun 2>/dev/null
             if [ ! -c /dev/net/tun ]; then sudo mkdir -p /dev/net && sudo mknod /dev/net/tun c 10 200; fi
             ls -l /dev/net/tun
             curl -fsSL https://tailscale.com/install.sh | sh
@@ -28,7 +29,7 @@ jobs:
             sudo mkdir -p /var/run/tailscale /var/lib/tailscale
             sudo setsid nohup tailscaled --state=/var/lib/tailscale/ts.state --statedir=/var/lib/tailscale --socket=/var/run/tailscale/tailscaled.sock > /tmp/tscaled.log 2>&1 &
             sleep 5
-            ps aux | grep -c tailscaled
+            ps aux | grep tailscaled | grep -v grep
             HN="diag-ts"
             sudo tailscale --socket=/var/run/tailscale/tailscaled.sock up --authkey="${{ secrets.TS_AUTHKEY }}" --hostname="$HN" --advertise-exit-node --accept-dns=false --accept-risk=lose-ssh
             echo "UP_EXIT=$?"
@@ -36,9 +37,9 @@ jobs:
             echo "tailscaled log:"
             cat /tmp/tscaled.log
           } > diag.log 2>&1
-          tailscale --version 2>/dev/null
           git config user.name ts-diag
           git config user.email ts-diag@users.noreply.github.com
           git add diag.log
           git commit -m "diag log $(date -u +%FT%TZ)" || echo "nothing to commit"
           git push -q || echo "(push failed)"
+          exit 0
