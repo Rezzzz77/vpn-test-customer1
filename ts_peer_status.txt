@@ -1,0 +1,1 @@
+{"time": "2026-09-14T19:04:58Z", "self": {"online": true, "dnsName": "test-customer1.tail8f0d9e.ts.net"}, "peers": []}
