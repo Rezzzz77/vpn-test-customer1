@@ -1,0 +1,118 @@
+time=2026-09-14T19:34:56Z
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1
+Installing Tailscale for ubuntu noble, using method apt
++ sudo mkdir -p --mode=0755 /usr/share/keyrings
++ curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.noarmor.gpg
++ sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg
++ sudo chmod 0644 /usr/share/keyrings/tailscale-archive-keyring.gpg
++ curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/noble.tailscale-keyring.list
++ sudo tee /etc/apt/sources.list.d/tailscale.list
+# Tailscale packages for ubuntu noble
+deb [signed-by=/usr/share/keyrings/tailscale-archive-keyring.gpg] https://pkgs.tailscale.com/stable/ubuntu noble main
++ sudo chmod 0644 /etc/apt/sources.list.d/tailscale.list
++ sudo apt-get update
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:7 https://dl.google.com/linux/chrome-stable/deb stable InRelease [2548 B]
+Get:8 https://pkgs.tailscale.com/stable/ubuntu noble InRelease
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [464 kB]
+Get:10 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [415 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1263 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [292 kB]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [181 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1691 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [339 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [388 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1544 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [354 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [5772 B]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [12.6 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1007 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [213 kB]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [46.4 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1207 kB]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [242 kB]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [76.3 kB]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1445 kB]
+Get:29 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [336 kB]
+Get:30 https://dl.google.com/linux/chrome-stable/deb stable/main amd64 Packages [1410 B]
+Get:31 https://pkgs.tailscale.com/stable/ubuntu noble/main amd64 Packages [16.3 kB]
+Get:32 https://pkgs.tailscale.com/stable/ubuntu noble/main all Packages [351 B]
+Fetched 11.9 MB in 1s (8485 kB/s)
+Reading package lists...
++ [ -n  ]
++ sudo apt-get install -y tailscale tailscale-archive-keyring
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  tailscale tailscale-archive-keyring
+0 upgraded, 2 newly installed, 0 to remove and 52 not upgraded.
+Need to get 38.7 MB of archives.
+After this operation, 76.0 MB of additional disk space will be used.
+Get:1 https://pkgs.tailscale.com/stable/ubuntu noble/main amd64 tailscale amd64 1.102.4 [38.7 MB]
+Get:2 https://pkgs.tailscale.com/stable/ubuntu noble/main all tailscale-archive-keyring all 1.35.181 [3082 B]
+Fetched 38.7 MB in 1s (75.3 MB/s)
+Selecting previously unselected package tailscale.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 201818 files and directories currently installed.)
+Preparing to unpack .../tailscale_1.102.4_amd64.deb ...
+Unpacking tailscale (1.102.4) ...
+Selecting previously unselected package tailscale-archive-keyring.
+Preparing to unpack .../tailscale-archive-keyring_1.35.181_all.deb ...
+Unpacking tailscale-archive-keyring (1.35.181) ...
+Setting up tailscale-archive-keyring (1.35.181) ...
+Setting up tailscale (1.102.4) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/tailscaled.service → /usr/lib/systemd/system/tailscaled.service.
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
++ [ false = true ]
++ set +x
+Installation complete! Log in to start using Tailscale by running:
+
+sudo tailscale up
+1.102.4
+  tailscale commit: 3caf7d9e7dcaba589cfc58beda596929733e4fea
+  long version: 1.102.4-t3caf7d9e7-g084ee3b64
+  other commit: 084ee3b64537a1276e56fc38cdf0a711da9f4936
+  go version: go1.26.6 (tailscale/go 7275f792d4)
+--- systemd daemon state ---
+active
+--- processes ---
+root        2847  1.3  0.3 1355344 51320 ?       Ssl  19:35   0:00 /usr/sbin/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=41641
+failed to connect to local tailscaled (which appears to be running as tailscaled, pid 2847). Got error: Failed to connect to local Tailscale daemon for /localapi/v0/status; not running? Error: dial unix /var/lib/tailscale/ts-exit.sock: connect: no such file or directory
+UP_EXIT=1
+failed to connect to local tailscaled (which appears to be running as tailscaled, pid 2847). Got error: Failed to connect to local Tailscale daemon for /localapi/v0/status; not running? Error: dial unix /var/lib/tailscale/ts-exit.sock: connect: no such file or directory
+--- tscaled.log ---
+TPM: error opening: stat /dev/tpmrm0: no such file or directory
+2026/09/14 19:35:08 Program starting: v1.102.4-t3caf7d9e7-g084ee3b64, Go 1.26.6: []string{"tailscaled", "--state=/var/lib/tailscale/ts.state", "--statedir=/var/lib/tailscale", "--socket=/var/lib/tailscale/ts-exit.sock"}
+2026/09/14 19:35:08 LogID: 6c1278e0f7cd4281b0e4b16b57cda008c45d10f294897712847129835bbff97a
+2026/09/14 19:35:08 logpolicy: using system state directory "/var/lib/tailscale"
+2026/09/14 19:35:08 dns: [resolved-ping=yes rc=resolved resolved=file nm=no resolv-conf-mode=stub ret=systemd-resolved]
+2026/09/14 19:35:08 dns: using "systemd-resolved" mode
+2026/09/14 19:35:08 dns: using *dns.resolvedManager
+2026/09/14 19:35:08 wgengine.NewUserspaceEngine(tun "tailscale0") ...
+2026/09/14 19:35:08 TUN device tailscale0 is busy; another process probably still has it open (from old version of Tailscale that had a bug)
+2026/09/14 19:35:08 To fix, kill the process that has it open. Find with:
+
+$ sudo lsof -n /dev/net/tun
+
+2026/09/14 19:35:08 ... and then kill those PID(s)
+2026/09/14 19:35:08 wgengine.NewUserspaceEngine(tun "tailscale0") error: tstun.New("tailscale0"): device or resource busy
+2026/09/14 19:35:08 flushing log.
+2026/09/14 19:35:08 logger closing down
+2026/09/14 19:35:09 logtail: upload: log upload of 338 bytes compressed failed: Post "https://log.tailscale.com/c/tailnode.log.tailscale.io/88811427445c1ff0791fbda612fcd313e3de8e22d349dcacae73fa863f387853": context canceled
+2026/09/14 19:35:09 getLocalBackend error: createEngine: tstun.New("tailscale0"): device or resource busy
