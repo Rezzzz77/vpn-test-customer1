@@ -50,22 +50,22 @@ jobs:
           sudo setsid nohup tailscaled \
             --state=/var/lib/tailscale/ts.state \
             --statedir=/var/lib/tailscale \
-            --socket=/var/run/tailscale/tailscaled.sock \
+            --socket=/var/lib/tailscale/ts-exit.sock \
             > /tmp/tscaled.log 2>&1 &
           sleep 3
           HN="${{ github.event.inputs.hostname }}"
           [ -z "$HN" ] && HN="test-customer1"
-          sudo tailscale --socket=/var/run/tailscale/tailscaled.sock up \
+          sudo tailscale --socket=/var/lib/tailscale/ts-exit.sock up \
             --authkey="${{ secrets.TS_AUTHKEY }}" \
             --hostname="$HN" \
             --advertise-exit-node \
             --accept-dns=false \
             --accept-risk=lose-ssh
           echo "### وضعیت نود"
-          sudo tailscale --socket=/var/run/tailscale/tailscaled.sock status
-          echo "TS_IP=$(sudo tailscale --socket=/var/run/tailscale/tailscaled.sock ip -4)" >> "$GITHUB_ENV"
+          sudo tailscale --socket=/var/lib/tailscale/ts-exit.sock status
+          echo "TS_IP=$(sudo tailscale --socket=/var/lib/tailscale/ts-exit.sock ip -4)" >> "$GITHUB_ENV"
           # تشخیص مسیر: مستقیم یا relay (برای مانیتورینگ پینگ/سرعت)
-          sudo tailscale --socket=/var/run/tailscale/tailscaled.sock status --json > /tmp/tsstatus.json 2>/dev/null || true
+          sudo tailscale --socket=/var/lib/tailscale/ts-exit.sock status --json > /tmp/tsstatus.json 2>/dev/null || true
           PYCODE='import json,time; d=json.load(open("/tmp/tsstatus.json")); peers=d.get("Peer",{}) or {}; me=d.get("Self",{}); out={"time":time.strftime("%FT%TZ",time.gmtime()),"self":{"online":me.get("Online"),"dnsName":(me.get("DNSName") or "").rstrip(".")},"peers":[{"name":(p.get("DNSName") or "").rstrip("."),"online":p.get("Online"),"relay":p.get("Relay"),"curAddr":p.get("CurAddr"),"addrs":p.get("Addrs") or [],"rxBytes":p.get("RxBytes"),"txBytes":p.get("TxBytes")} for k,p in peers.items()]}; print(json.dumps(out))'
           python3 -c "$PYCODE" > ts_peer_status.txt 2>/dev/null || true
       - name: گزارش نود (IP عمومی رانر + IP تیل‌نت)
@@ -84,7 +84,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TS="sudo tailscale --socket=/var/run/tailscale/tailscaled.sock"
+          TS="sudo tailscale --socket=/var/lib/tailscale/ts-exit.sock"
           END=$((SECONDS + 20200))
           FAILS=0
           while [ $SECONDS -lt $END ]; do
@@ -96,7 +96,7 @@ jobs:
               FAILS=$((FAILS+1))
               echo "[$(date -u +%T)] tailscaled پاسخ نمی‌دهد ($FAILS) — تلاش مجدد up"
               sudo tailscaled --state=/var/lib/tailscale/ts.state --statedir=/var/lib/tailscale \
-                --socket=/var/run/tailscale/tailscaled.sock >> /tmp/tscaled.log 2>&1 &
+                --socket=/var/lib/tailscale/ts-exit.sock >> /tmp/tscaled.log 2>&1 &
               sleep 5
               $TS up --authkey="${{ secrets.TS_AUTHKEY }}" --hostname="test-customer1" \
                 --advertise-exit-node --accept-dns=false --accept-risk=lose-ssh 2>/dev/null || true
