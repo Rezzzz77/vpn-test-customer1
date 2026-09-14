@@ -106,7 +106,7 @@ jobs:
 
           C=$(curl -s -o /dev/null -w '%{http_code}' -X POST "${auth[@]}" \
             -H "Content-Type: application/json" \
-            -d '{"ref":"main","inputs":{"hostname":"gh-exit"}}' \
+            -d '{"ref":"main","inputs":{"hostname":"test-customer1"}}' \
             "https://api.github.com/repos/$REPO/actions/workflows/ts-exit.yml/dispatches")
           echo "fresh node dispatched: HTTP $C"
           [ "$C" = "204" ] || exit 1
