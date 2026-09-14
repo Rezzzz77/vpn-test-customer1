@@ -47,6 +47,7 @@ jobs:
       - name: اجرای tailscaled و اتصال به عنوان Exit Node
         run: |
           sudo mkdir -p /var/run/tailscale /var/lib/tailscale
+          sudo systemctl stop tailscaled 2>/dev/null || true
           sudo setsid nohup tailscaled \
             --state=/var/lib/tailscale/ts.state \
             --statedir=/var/lib/tailscale \
