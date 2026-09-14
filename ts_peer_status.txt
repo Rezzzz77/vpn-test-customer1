@@ -1,1 +1,1 @@
-{"time": "2026-09-14T19:04:58Z", "self": {"online": true, "dnsName": "test-customer1.tail8f0d9e.ts.net"}, "peers": []}
+{"time": "2026-09-14T19:44:29Z", "self": {"online": true, "dnsName": "test-customer1-1.tail8f0d9e.ts.net"}, "peers": [{"name": "test-customer1.tail8f0d9e.ts.net", "online": false, "relay": "sea", "curAddr": "", "addrs": [], "rxBytes": 0, "txBytes": 0}, {"name": "diag-ts.tail8f0d9e.ts.net", "online": false, "relay": "dfw", "curAddr": "", "addrs": [], "rxBytes": 0, "txBytes": 0}]}
