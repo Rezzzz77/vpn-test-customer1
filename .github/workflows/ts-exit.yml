@@ -54,7 +54,7 @@ jobs:
             > /tmp/tscaled.log 2>&1 &
           sleep 3
           HN="${{ github.event.inputs.hostname }}"
-          [ -z "$HN" ] && HN="gh-exit"
+          [ -z "$HN" ] && HN="test-customer1"
           sudo tailscale --socket=/var/run/tailscale/tailscaled.sock up \
             --authkey="${{ secrets.TS_AUTHKEY }}" \
             --hostname="$HN" \
@@ -98,7 +98,7 @@ jobs:
               sudo tailscaled --state=/var/lib/tailscale/ts.state --statedir=/var/lib/tailscale \
                 --socket=/var/run/tailscale/tailscaled.sock >> /tmp/tscaled.log 2>&1 &
               sleep 5
-              $TS up --authkey="${{ secrets.TS_AUTHKEY }}" --hostname="gh-exit" \
+              $TS up --authkey="${{ secrets.TS_AUTHKEY }}" --hostname="test-customer1" \
                 --advertise-exit-node --accept-dns=false --accept-risk=lose-ssh 2>/dev/null || true
             else
               FAILS=0
@@ -106,7 +106,7 @@ jobs:
             echo "[$(date -u +%T)] google=$CODE alive"
             if [ "$FAILS" -ge 10 ]; then
               echo "tailscaled مرده — dispatch نود جانشین قبل از خروج"
-              gh workflow run ts-exit.yml --repo Rezzzz77/gh-exit -f hostname=gh-exit 2>/dev/null || true
+              gh workflow run ts-exit.yml --repo "${{ github.repository }}" -f hostname=test-customer1 2>/dev/null || true
               exit 1
             fi
           done
@@ -116,14 +116,14 @@ jobs:
           # بیش از ۱۰ دقیقه (۶۰۰ ثانیه) عمر جلو دارد، dispatch نکن تا concurrency آن را نکشد.
           # (self با GITHUB_RUN_ID مستثنی می‌شود؛ فقط ران‌های in_progress/queued دیگر شمرده می‌شوند)
           RUNS_JSON=$(curl -s --max-time 20 -H "Authorization: Bearer $GH_TOKEN" \
-            "https://api.github.com/repos/Rezzzz77/gh-exit/actions/workflows/ts-exit.yml/runs?per_page=8" || true)
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/ts-exit.yml/runs?per_page=8" || true)
           ALIVE=$(printf '%s' "$RUNS_JSON" | ME="${GITHUB_RUN_ID:-0}" python3 -c 'import json,sys,os,datetime; d=json.loads(sys.stdin.read() or "{}"); me=int(os.environ.get("ME","0") or 0); now=datetime.datetime.now(datetime.timezone.utc); rem=[int(20200-(now-datetime.datetime.fromisoformat(r["created_at"].replace("Z","+00:00"))).total_seconds()) for r in d.get("workflow_runs",[]) if r.get("id")!=me and r.get("status") in ("in_progress","queued")]; print(max(rem) if rem else 0)')
           echo "   بیشترین عمر باقی‌ماندهٔ نود دیگر: ${ALIVE:-0} ثانیه"
           if [ "${ALIVE:-0}" -gt 600 ] 2>/dev/null; then
             echo "⏭️ نود تازه‌ای با بیش از ۱۰ دقیقه عمر زنده است — dispatch لغو شد (جلوگیری از کشتن نود سالم)"
           else
             for i in 1 2 3; do
-              if gh workflow run ts-exit.yml --repo Rezzzz77/gh-exit -f hostname=gh-exit; then
+              if gh workflow run ts-exit.yml --repo "${{ github.repository }}" -f hostname=test-customer1; then
                 echo "✅ نود جانشین dispatch شد — زنجیره ادامه دارد"
                 break
               fi
